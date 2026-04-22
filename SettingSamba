@@ -1,0 +1,65 @@
+# Samaba is main servere that supports active directory
+
+# Set IP address to your pc
+sudo vi /etc/netplan/*.yaml
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    eth0:
+      dhcp4: no
+      addresses:
+        - 192.168.1.10/24
+      nameservers:
+        addresses:
+          - 127.0.0.1
+          - 8.8.8.8
+         search:
+          - lab.local
+      routes:
+        - to: default
+          via: 192.168.1.1
+sudo netplan apply
+
+# Set hostname for your sever pc
+sudo hostnamectl set-hostname iot.GPCA.local    # server pc calls it self iot
+
+# Edit host file 
+sudo vi /etc/hosts
+192.168.10.1 iot.GPCA.local iot
+
+
+#
+sudo apt update
+sudo apt install samba krb5-user
+
+
+# These are for file server mode, not AD DC mode
+sudo systemctl stop smbd nmbd winbind
+sudo systemctl disable smbd nmbd winbind
+
+# Domain provision
+sudo samba-tool domain provision
+
+Realm: LAB.LOCAL
+Domain: LAB
+Server Role: dc
+DNS backend: SAMBA_INTERNAL
+Administrator password: StrongPassword@123
+
+# unmask enable the service to be start. A masked service can't be started at all
+sudo systemctl unmask samba-ad-dc
+sudo systemctl enable samba-ad-dc
+sudo systemctl start samba-ad-dc
+
+###########################
+# KERBOS COMMANDS
+###########################
+/etc/krb5.conf  # contains realm, KDC server, Domain Mapping
+
+# Confirm Kerberos is working
+kinit administrator
+klist
+
+# Confirm AD is working
+samba-tool domain level show
