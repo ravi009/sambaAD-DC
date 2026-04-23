@@ -1,0 +1,36 @@
+# To change password complexity
+samba-tool domain passwordsettings set \
+  --min-pwd-length=8 \
+  --complexity=on \
+  --history-length=5 \
+  --max-pwd-age=30
+# Disable user account
+samba-tool user disable username
+
+# Change user password
+samba-tool user setpassword username --newpassword='NewPass@123'
+samba-tool user setpassword username --must-change-at-next-login
+
+
+# Create users from csv list
+#!/bin/bash
+
+INPUT="users.csv"
+
+while IFS=',' read -r username firstname lastname password
+do
+    if [ "$username" != "username" ]; then
+        echo "Creating user: $username"
+
+        samba-tool user create "$username" "$password" \
+            --given-name="$firstname" \
+            --surname="$lastname" \
+            --use-username-as-cn
+
+    fi
+done < "$INPUT"
+
+# View user list
+samba-tool user list
+
+# RSAT is better for policy related management
