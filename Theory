@@ -46,3 +46,18 @@ Manages object inside Active Directory
   b. Attach GPO to OU
   c. 
 3. DNS Manager
+
+# To disable usb for student group
+In GPMC:
+Select GPO → Scope tab
+Remove: Authenticated Users
+Add: Students
+# TO check whether GPO is applied to OU
+gpresult /r
+
+Basic setup
+Create Student OU and with in them we can create further ou containing semester, branch
+Let us start with student ou and add all students in int.
+
+Also create Computer OU and add Lab OU with in it
+Inside LAB OU add PC in that lab.
