@@ -1,0 +1,48 @@
+An OU (Organizational Unit) is basically a container inside Active Directory used to organize objects like:
+
+Users 👤
+Computers 💻
+Groups 👥
+
+Think of it like folders in your file system.
+
+We use OU to separate different types of user, systems. Then we can apply single policy to whole OU.
+
+GROUP POLICY OBJECT (GPO)
+A GPO is the set of rules applied to user or computers. It detemines what a user can do and what a system can do.
+There are two types of setting in GPO
+1. User configuration: Applies to user no matter where he logs
+2. System Configuration: Applies to system  no matter who logs in
+When user logs in pollicy applies in following manner
+L - Local
+S -  System
+D - Domain
+OU - Organizational Unit
+Last applied is strongest
+OU policies override Domain policies
+Child OU inherits parent OU policy by default
+samba-tool ou create "OU=Students,DC=iot,DC=local"      # DC stands for Domain Compoent meaninig if domain is iot.local then DC=iot and DC=local
+samba-tool gpo create "Student-Restrictions"
+
+samba-tool gpo setlink "OU=Students,DC=iot,DC=local" "Student-Restrictions"
+# List all gpo
+samba-tool gpo listall
+# Check if gpo is linked
+samba-tool gpo listlinks "OU=Students,DC=iot,DC=local"
+# Move user to OU
+samba-tool user move student1 "OU=Students,DC=iot,DC=local"
+
+Apply restriction is difficult in samba cli so we move to RSAT Group Policy Management
+
+RSAT has group of tools
+1. Active Directory Users and Computers (ADUC)
+Manages object inside Active Directory
+  a.User - Create, Reset Password, Enable Diable account
+  b.Groups - Create group, Add remove members
+  c. Organizational Unit (OU) Create OU, Move user/computers in OU
+  d. Computers - See domain joined PC
+2. Group Policy Management (GPMC)
+  a. Create GPO (like Student Restriction)
+  b. Attach GPO to OU
+  c. 
+3. DNS Manager
