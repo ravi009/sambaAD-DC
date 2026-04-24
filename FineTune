@@ -16,7 +16,7 @@ samba-tool user disable username
 samba-tool user setpassword username --newpassword='NewPass@123'
 samba-tool user setpassword username --must-change-at-next-login
 
-
+samba-tool user list
 # Create users from csv list
 #!/bin/bash
 
