@@ -1,0 +1,4 @@
+username,password,givenName,surname,displayName,ou
+2900,Pass@123,Ravi,Kumar,Ravi Kumar,"OU=Class10,OU=Students"
+2901,Pass@123,Amit,Sharma,Amit Sharma,"OU=Class10,OU=Students"
+2902,Pass@123,Sara,Ali,Sara Ali,"OU=Class10,OU=Students"
